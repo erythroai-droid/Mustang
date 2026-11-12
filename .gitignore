@@ -1,0 +1,13 @@
+node_modules/
+.next/
+.next-build/
+*.tsbuildinfo
+
+# public/video holds the three ~2.5 MB section loops and IS committed (Vercel needs them).
+# Keep raw masters out of public/: they live in /Assets (source photos + videos) or /Video.
+/Video/
+
+# local tooling and third-party design reference (not ours to publish)
+/.claude/
+/Assets/img/vanta-hero.jpg
+.env*

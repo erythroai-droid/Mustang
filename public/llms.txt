@@ -1,0 +1,22 @@
+# MUSTANG 6663 RT
+
+> MUSTANG 6663 RT is a product scroll-landing by Erythro.ai: a scroll-driven experience where the product assembles part by part.
+
+- **Product:** MUSTANG 6663 RT
+- **Website:** https://mustang-6663rt.erythro.ai
+- **Agency:** Erythro.ai — https://erythro.ai
+- **Languages:** English, Russian, Hebrew, Arabic
+
+## Page sections
+
+- [#top](https://mustang-6663rt.erythro.ai/#top): Hero + scroll-assembled product
+- [#movement](https://mustang-6663rt.erythro.ai/#movement): Feature section A
+- [#design](https://mustang-6663rt.erythro.ai/#design): Design carousel
+- [#parts](https://mustang-6663rt.erythro.ai/#parts): Parts / specs table
+- [#contact](https://mustang-6663rt.erythro.ai/#contact): Contact / reserve CTA
+
+## Related
+
+- [Erythro.ai](https://erythro.ai)
+- [robots.txt](https://mustang-6663rt.erythro.ai/robots.txt)
+- [sitemap.xml](https://mustang-6663rt.erythro.ai/sitemap.xml)
