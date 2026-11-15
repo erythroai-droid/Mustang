@@ -26,8 +26,24 @@ import './globals.css';
 import { I18nProvider } from '@/lib/i18n';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://mustang.erythro.ai'),
   title: 'MUSTANG 6663 RT — hand-built fastback',
-  description: 'MUSTANG 6663 RT: a hand-built matte black fastback with gold-leaf stripes. Sixty-six cars, then the tooling burns.',
+  description:
+    'MUSTANG 6663 RT: a hand-built matte black fastback with gold-leaf stripes. Sixty-six cars, then the tooling burns.',
+  openGraph: {
+    title: 'MUSTANG 6663 RT — hand-built fastback',
+    description:
+      'MUSTANG 6663 RT: a hand-built matte black fastback with gold-leaf stripes. Sixty-six cars, then the tooling burns.',
+    url: '/',
+    siteName: 'MUSTANG 6663 RT',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'MUSTANG 6663 RT — hand-built fastback',
+    description:
+      'MUSTANG 6663 RT: a hand-built matte black fastback with gold-leaf stripes. Sixty-six cars, then the tooling burns.',
+  },
 };
 export const viewport: Viewport = { themeColor: '#050505', width: 'device-width', initialScale: 1 };
 
