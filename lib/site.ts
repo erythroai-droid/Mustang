@@ -24,6 +24,19 @@ export const VIDEO = {
   drive: '/video/v2.mp4',    // drift on the salt flat
   outro: '/video/v3.mp4',    // drives off into the night
 };
+/**
+ * Phones (static mode): light cuts made with ffmpeg-static from the masters above, no audio, faststart.
+ * reveal: 4:3 centre crop (the whole car stays in frame), 720x540, ~250 KB; drive/outro: 9:16 centre crop, 432x768, ~270/~90 KB.
+ */
+export const VIDEO_M = {
+  reveal: '/video/v1-m.mp4',
+  revealPoster: '/video/v1-m-poster.webp',   // first frame: the car still under the sheet
+  revealEnd: '/video/v1-m-end.webp',         // last frame: reduced motion / Data Saver
+  drive: '/video/v2-m.mp4',
+  drivePoster: '/video/v2-m-poster.webp',
+  outro: '/video/v3-m.mp4',
+  outroPoster: '/video/v3-m-poster.webp',
+};
 
 /** 02 — numbers. Count-up targets; labels are i18n keys sp{n}u / sp{n}l / sp{n}d. */
 export const SPECS = [

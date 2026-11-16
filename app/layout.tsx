@@ -22,12 +22,16 @@ import '@fontsource/heebo/hebrew-400.css';
 import '@fontsource/heebo/hebrew-500.css';
 import '@fontsource/heebo/hebrew-600.css';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 import { I18nProvider } from '@/lib/i18n';
+import { MetaPixel } from '@/components/MetaPixel';
+import { GoogleAnalytics } from '@/components/GoogleAnalytics';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://mustang.erythro.ai'),
   title: 'MUSTANG 6663 RT — hand-built fastback',
+  alternates: { canonical: '/' },
   description:
     'MUSTANG 6663 RT: a hand-built matte black fastback with gold-leaf stripes. Sixty-six cars, then the tooling burns.',
   openGraph: {
@@ -37,6 +41,7 @@ export const metadata: Metadata = {
     url: '/',
     siteName: 'MUSTANG 6663 RT',
     type: 'website',
+    locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
@@ -53,11 +58,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         {/* decide the static (no-animation) layout before first paint, so phones never flash the animated one */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.toggle('static',matchMedia('(max-width: 900px), (prefers-reduced-motion: reduce)').matches)" }} />
-        <link rel="preload" as="image" href="/frames/assembly/1280/frame_0001.webp" />
+        {/* first paint: the first hero frame on desktop, the mobile clip's poster on phones */}
+        <link rel="preload" as="image" href="/frames/assembly/1280/frame_0001.webp" media="(min-width: 901px)" />
+        <link rel="preload" as="image" href="/video/v1-m-poster.webp" media="(max-width: 900px)" />
       </head>
       <body>
         <I18nProvider>{children}</I18nProvider>
         <SpeedInsights />
+        <Analytics />
+        {/* ad tracking (same IDs as ORA 60A, override per client with NEXT_PUBLIC_META_PIXEL_ID / NEXT_PUBLIC_GA_ID, 0 = off) */}
+        <MetaPixel />
+        <GoogleAnalytics />
       </body>
     </html>
   );

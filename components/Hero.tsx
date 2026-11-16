@@ -1,8 +1,8 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { ScrollTrigger, useScrollReady, useStaticMode } from '@/lib/scroll';
+import { gsap, prefersReducedMotion, saveData, ScrollTrigger, useScrollReady, useStaticMode } from '@/lib/scroll';
 import { useI18n } from '@/lib/i18n';
-import { ALLOCATION, BRAND, FRAMES, framePath, img, MODEL, pad, REVEAL_SECONDS, srcSet } from '@/lib/site';
+import { ALLOCATION, BRAND, FRAMES, framePath, MODEL, pad, REVEAL_SECONDS, VIDEO_M } from '@/lib/site';
 
 type Props = { onLoadProgress?: (pct: number) => void };
 
@@ -128,13 +128,52 @@ function AnimatedHero({ onLoadProgress }: Props) {
   );
 }
 
-// Phones / reduced motion: the revealed car as a still, same copy, no canvas.
+/**
+ * Phones/tablets (ORA 60A mobile pattern): the sheet-lift clip plays once on its own (4:3 cut, ~250 KB, the whole car in
+ * frame), and as it ends the outline brand comes up dead centre and fills with white, like the desktop scroll does.
+ * Reduced motion / Data Saver: the clip's last frame with the brand already filled.
+ */
 function StaticHero() {
+  const sec = useRef<HTMLElement>(null);
+  const [still] = useState(() => prefersReducedMotion() || saveData());
+  const [sec5, setSec5] = useState(still ? REVEAL_SECONDS - 1 : 0);
+  const done = useRef(false);
+
+  const finish = () => {
+    if (done.current || !sec.current) return;
+    done.current = true;
+    gsap.timeline()
+      .to(sec.current, { '--show': 1, duration: 0.7, ease: 'power2.out' })
+      .to(sec.current, { '--fill': 1, duration: 1.5, ease: 'power2.inOut' }, '+=0.15');
+  };
+
+  useEffect(() => {
+    if (still) { sec.current?.style.setProperty('--show', '1'); sec.current?.style.setProperty('--fill', '1'); return; }
+    const fallback = window.setTimeout(finish, (REVEAL_SECONDS + 2.5) * 1000);   // the clip stalled or autoplay was refused
+    return () => clearTimeout(fallback);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [still]);
+
   return (
-    <section id="top" className="hero-static">
-      <img src={img('profile', 1280)} srcSet={srcSet('profile')} sizes="100vw" alt="MUSTANG 6663 RT" width={1280} height={714} />
+    <section ref={sec} id="top" className="hero-static">
+      <div className="hs-media">
+        {still
+          ? <img src={VIDEO_M.revealEnd} alt="MUSTANG 6663 RT" width={720} height={540} />
+          : (
+            <video
+              src={VIDEO_M.reveal}
+              poster={VIDEO_M.revealPoster}
+              autoPlay muted playsInline preload="auto" disablePictureInPicture aria-hidden
+              onTimeUpdate={(e) => setSec5(Math.min(REVEAL_SECONDS - 1, Math.floor(e.currentTarget.currentTime)))}
+              onEnded={finish}
+            />
+          )}
+      </div>
       <div className="hero-shade" />
-      <div className="hero-ui"><Copy time={`00:00:0${REVEAL_SECONDS - 1}`} /></div>
+      <div className="hero-end" aria-hidden>
+        <span className="hero-brand" dir="ltr">{BRAND}</span><span className="hero-model" dir="ltr">{MODEL}</span>
+      </div>
+      <div className="hero-ui"><Copy time={`00:00:0${sec5}`} /></div>
     </section>
   );
 }

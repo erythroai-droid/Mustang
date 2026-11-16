@@ -1,24 +1,28 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { prefersReducedMotion, useStaticMode } from '@/lib/scroll';
+import { prefersReducedMotion, saveData, useStaticMode } from '@/lib/scroll';
 
 type Src = { src: string; type?: string };
 
 /**
  * Full-bleed muted looping video behind a content section.
- * Plays only while the host is near the viewport; pauses off-screen and under reduced motion / static mode.
+ * Plays only while the host is near the viewport; pauses off-screen.
+ * Phones/tablets (static mode) play `mobileSrc` (a light portrait cut) when given, otherwise nothing; reduced motion and
+ * Data Saver never get video.
  */
-export default function VideoBg({ src, sources, className = '' }: { src?: string; sources?: Src[]; className?: string }) {
+export default function VideoBg({ src, sources, mobileSrc, className = '' }: { src?: string; sources?: Src[]; mobileSrc?: string; className?: string }) {
   const staticMode = useStaticMode();
   const wrap = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
-  const list = sources ?? (src ? [{ src }] : []);
+  const desktop = sources ?? (src ? [{ src }] : []);
+  const list = staticMode ? (mobileSrc ? [{ src: mobileSrc }] : []) : desktop;
+  const key = list.map((s) => s.src).join('|');
 
   useEffect(() => {
     const node = video.current;
     const host = wrap.current?.parentElement;
     if (!node || !host || !list.length) return;
-    if (staticMode || prefersReducedMotion()) {
+    if (prefersReducedMotion() || (staticMode && saveData())) {
       node.removeAttribute('src');
       node.load();
       return;
@@ -41,13 +45,15 @@ export default function VideoBg({ src, sources, className = '' }: { src?: string
     document.addEventListener('visibilitychange', onVis);
 
     return () => { io.disconnect(); document.removeEventListener('visibilitychange', onVis); pause(); };
-  }, [staticMode, list.length]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [staticMode, key]);
 
-  if (!list.length || staticMode) return null;
+  if (!list.length) return null;
 
   return (
-    <div ref={wrap} className={`vbg ${className}`} aria-hidden>
+    <div ref={wrap} className={`vbg ${staticMode ? 'vbg-m' : ''} ${className}`} aria-hidden>
       <video
+        key={key}
         ref={video}
         className="vbg-video"
         muted

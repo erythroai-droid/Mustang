@@ -6,8 +6,8 @@ import VideoBg from './VideoBg';
 import { OPEN_CONTACT } from './Header';
 import { useI18n } from '@/lib/i18n';
 import { holdPx, useHold } from '@/lib/hold';
-import { gsap, goToSection, prefersReducedMotion, ScrollTrigger, useScrollReady, useStaticMode } from '@/lib/scroll';
-import { ALLOCATION, BRAND, CONTACT, DETAILS, DRIVE_CARDS, FINISHES, img, MODEL, pad, SPECS, srcSet, VIDEO } from '@/lib/site';
+import { gsap, goToSection, prefersReducedMotion, ScrollTrigger, useMobileMotion, useOnceInView, useScrollReady, useStaticMode } from '@/lib/scroll';
+import { ALLOCATION, BRAND, CONTACT, DETAILS, DRIVE_CARDS, FINISHES, img, MODEL, pad, SPECS, srcSet, VIDEO, VIDEO_M } from '@/lib/site';
 
 /** "Numbers we / never rounded." — two display lines, the middle word in italic serif. */
 function Title({ k, a, i, b }: { k: string; a: string; i: string; b: string }) {
@@ -90,8 +90,11 @@ export function Drive() {
   return (
     <section ref={sec} id="drive" className="drive">
       <div ref={media} className="drive-media">
-        <img className="drive-poster" src={img('drift', 1280)} srcSet={srcSet('drift')} sizes="100vw" alt="" loading="lazy" />
-        <VideoBg src={VIDEO.drive} />
+        <picture>
+          <source media="(max-width: 900px)" srcSet={VIDEO_M.drivePoster} />
+          <img className="drive-poster" src={img('drift', 1280)} srcSet={srcSet('drift')} sizes="100vw" alt="" loading="lazy" />
+        </picture>
+        <VideoBg src={VIDEO.drive} mobileSrc={VIDEO_M.drive} />
         <div className="drive-word" aria-hidden dir="ltr">{BRAND}</div>
       </div>
       <div className="drive-content">
@@ -138,6 +141,19 @@ export function Detail() {
     });
     return () => { st.kill(); gsap.killTweensOf(r); gsap.set(r, { clearProps: 'transform' }); };
   }, [ready, staticMode]);
+
+  // phones: the rail is a native swipe carousel (scroll-snap); the red bar follows the swipe (RTL scrollLeft is negative)
+  useEffect(() => {
+    if (!staticMode) return;
+    const r = rail.current!;
+    const on = () => {
+      const max = r.scrollWidth - r.clientWidth;
+      if (bar.current) bar.current.style.transform = `scaleX(${max > 0 ? Math.min(1, Math.abs(r.scrollLeft) / max) : 1})`;
+    };
+    on();
+    r.addEventListener('scroll', on, { passive: true });
+    return () => r.removeEventListener('scroll', on);
+  }, [staticMode]);
 
   return (
     <section ref={sec} id="detail" className="detail">
@@ -216,6 +232,9 @@ export function Outro() {
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   const stRef = useRef<ScrollTrigger | null>(null);
   const text = t('ou_h');
+  const mobile = useMobileMotion();
+  const [inView, setInView] = useState(false);
+  useOnceInView(sec, () => setInView(true), mobile, 0.45);   // phones: CSS writes the copy in once the video block is mostly on screen
 
   // the pin is created once, in page order with the other pins; re-creating it on a language change put it after the later blocks' pins
   // and threw their positions off (the video screen went black). The copy animation below is rebuilt per language instead.
@@ -251,15 +270,18 @@ export function Outro() {
   }, [ready, staticMode, text, lang]);
 
   return (
-    <section ref={sec} id="outro" className="outro">
-      <img className="outro-poster" src={img('night', 1280)} srcSet={srcSet('night')} sizes="100vw" alt="" loading="lazy" />
-      <VideoBg src={VIDEO.outro} />
+    <section ref={sec} id="outro" className={`outro ${inView ? 'in' : ''}`}>
+      <picture>
+        <source media="(max-width: 900px)" srcSet={VIDEO_M.outroPoster} />
+        <img className="outro-poster" src={img('night', 1280)} srcSet={srcSet('night')} sizes="100vw" alt="" loading="lazy" />
+      </picture>
+      <VideoBg src={VIDEO.outro} mobileSrc={VIDEO_M.outro} />
       <div className="outro-in">
         <p className="kicker red">{t('ou_k')}</p>
         <h2 className="outro-h" aria-label={text}>
           {/* letter by letter; Arabic word by word (split letters lose their joined forms) */}
           {/* a space as its own inline-block collapses to nothing: give it a no-break space */}
-          {(lang === 'ar' ? text.split(/(\s+)/).filter(Boolean) : [...text]).map((c, i) => <span key={i} aria-hidden>{/^\s+$/.test(c) ? ' ' : c}</span>)}
+          {(lang === 'ar' ? text.split(/(\s+)/).filter(Boolean) : [...text]).map((c, i) => <span key={i} aria-hidden style={{ '--i': i } as React.CSSProperties}>{/^\s+$/.test(c) ? ' ' : c}</span>)}
         </h2>
         <p className="outro-p">{t('ou_p1')}<br />{t('ou_p2')}</p>
       </div>
@@ -278,7 +300,7 @@ export function Reserve() {
         <Title k="rs_k" a="rs_h1" i="rs_i" b="rs_h2" />
         <Reveal delay={160}><p className="lead">{t('rs_p')}</p></Reveal>
         <Reveal delay={240}>
-          <button className="btn-big" onClick={() => window.dispatchEvent(new Event(OPEN_CONTACT))}>
+          <button className="btn-big" onClick={() => window.dispatchEvent(new CustomEvent(OPEN_CONTACT, { detail: 'reserve_block' }))}>
             {t('rs_btn')} <span className="arr">→</span>
           </button>
         </Reveal>
@@ -308,7 +330,7 @@ export function Footer() {
   const year = new Date().getFullYear();
   const go = (h: string) => (e: React.MouseEvent) => { e.preventDefault(); goToSection(h); };
   return (
-    <footer className="ftr">
+    <footer id="contact" className="ftr">
       <div className="wrap ftr-grid">
         <div>
           <div className="logo big" dir="ltr">{BRAND}</div>

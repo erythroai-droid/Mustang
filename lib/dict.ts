@@ -138,7 +138,14 @@ export const DICTS = {
     "ai_a2": "Four stripe packages: Gold, Racing Red, Polished Silver, and Full Blackout. All vehicles feature a black body; stripes are hand-painted in the atelier.",
     "ai_a3": "A refundable deposit of 1,500,000 ₽ secures your build slot and stripe specification. Limited edition of 66 units, 41 remaining.",
     "ai_a4": "Click \"Reserve\" in the header — this is a demo form. In the live version, requests are routed to the CRM, and the chat connects to Gemini just like on erythro.ai.",
-    "ai_a0": "Thanks for reaching out! This is a demo chat without an active model or knowledge base. In production, responses will be generated from the 6663 RT knowledge base powered by the erythro.ai consultant stack."
+    "ai_a0": "Thanks for reaching out! This is a demo chat without an active model or knowledge base. In production, responses will be generated from the 6663 RT knowledge base powered by the erythro.ai consultant stack.",
+    "c_sending": "Sending…",
+    "c_err": "Couldn’t send. Message us on WhatsApp for a faster response.",
+    "demo_h": "Thank You for Viewing",
+    "demo_p": "This is a showcase project. Contact us to discuss a bespoke website for your brand.",
+    "demo_wa": "Message on WhatsApp",
+    "demo_open": "Get in Touch",
+    "demo_msg": "Hello! I’d like to discuss a custom website for my brand. Reaching out after viewing the MUSTANG 6663 RT demo."
   },
   ru: {
     "loading": "Снимаем чехол",
@@ -278,7 +285,14 @@ export const DICTS = {
     "ai_a2": "Четыре пакета полос: золото, гоночный красный, полированное серебро и полный блэкаут. Кузов у всех чёрный, полосы наносятся вручную в ателье.",
     "ai_a3": "Возвратный депозит 1 500 000 ₽ закрепляет слот в очереди и цвет полос. Всего 66 машин, из них осталось 41.",
     "ai_a4": "Нажмите «Бронь» в шапке — это демо-форма. В рабочей версии заявка уйдёт в CRM, а чат подключится к Gemini как на erythro.ai.",
-    "ai_a0": "Спасибо за вопрос! Это демо-чат без модели и базы знаний. В живой версии ответы пойдут из базы знаний о 6663 RT по стеку консультанта erythro.ai."
+    "ai_a0": "Спасибо за вопрос! Это демо-чат без модели и базы знаний. В живой версии ответы пойдут из базы знаний о 6663 RT по стеку консультанта erythro.ai.",
+    "c_sending": "Отправляем…",
+    "c_err": "Не удалось отправить. Напишите нам в WhatsApp — ответим быстрее.",
+    "demo_h": "Спасибо за просмотр",
+    "demo_p": "Это демонстрационный проект. Чтобы обсудить такой сайт для вашего бренда, свяжитесь с нами.",
+    "demo_wa": "Написать в WhatsApp",
+    "demo_open": "Связаться с нами",
+    "demo_msg": "Здравствуйте! Хочу обсудить сайт для своего бренда. Пишу после просмотра демо MUSTANG 6663 RT."
   },
   he: {
     "loading": "מסירים את הכיסוי",
@@ -418,7 +432,14 @@ export const DICTS = {
     "ai_a2": "ארבע חבילות פסים: זהב, אדום מרוצים, כסף מלוטש ו-Full Blackout. המרכב שחור בכולם; הפסים מיושמים בעבודת יד בסדנת האומן (Atelier)‏",
     "ai_a3": "פיקדון בר-החזר בסך 1,500,000 ₽ מבטיח build slot בייצור ובחירת צבע פסים. מהדורה מוגבלת של 66 רכבים, נותרו 41 בלבד‏",
     "ai_a4": "לחצו על \"Reserve\" בכותרת העליונה — זהו טופס הדגמה בלבד. בגרסת הפרודקשן, הפנייה תישלח ישירות ל-CRM, והצ'אט יתחבר ל-Gemini בדיוק כמו ב-erythro.ai‏",
-    "ai_a0": "תודה על השאלה! זהו צ'אט דמו ללא מודל פעיל ובסיס ידע. בגרסת הפרודקשן, התשובות יופקו מתוך בסיס הידע של 6663 RT על גבי ה-stack של יועץ erythro.ai‏"
+    "ai_a0": "תודה על השאלה! זהו צ'אט דמו ללא מודל פעיל ובסיס ידע. בגרסת הפרודקשן, התשובות יופקו מתוך בסיס הידע של 6663 RT על גבי ה-stack של יועץ erythro.ai‏",
+    "c_sending": "שולחים…",
+    "c_err": "השליחה נכשלה. כתבו לנו ב-WhatsApp למענה מהיר יותר‏",
+    "demo_h": "תודה שצפיתם",
+    "demo_p": "זהו פרויקט הדגמה. לתיאום פיתוח אתר בהתאמה אישית למותג שלכם, דברו איתנו‏",
+    "demo_wa": "הודעה ב-WhatsApp",
+    "demo_open": "צרו קשר",
+    "demo_msg": "שלום! אשמח לדבר על אתר למותג שלי. פונה אליכם בעקבות הדמו של MUSTANG 6663 RT‏"
   },
   ar: {
     "loading": "نكشف الغطاء",
@@ -558,6 +579,13 @@ export const DICTS = {
     "ai_a2": "أربع باقات لخطوط السباق: الذهبي، أحمر السباقات، الفضي المصقول، والتعتيم الكامل (Full Blackout). الهيكل باللون الأسود لكافة النسخ، وتُطبَّق الخطوط يدوياً في الاستوديو الحرفي (Atelier)‏",
     "ai_a3": "عربون قابل للاسترداد بقيمة 1,500,000 ₽ يضمن حجز مقعد الإنتاج (Build slot) ولون الخطوط. الإصدار محدود بـ 66 سيارة فقط، المتبقي منها 41‏",
     "ai_a4": "اضغط على \"Reserve\" في الترويسة العلوية — هذا نموذج تجريبي فقط. في النسخة الفعلية، سيتم إرسال الطلب مباشرة إلى نظام الـ CRM، وسيتصل المساعد الذكي بـ Gemini تماماً كما في erythro.ai‏",
-    "ai_a0": "شكراً لتواصلك! هذه محادثة تجريبية تعمل بدون نموذج نشط أو قاعدة معرفة. في بيئة الإنتاج، ستصدر الإجابات من قاعدة معرفة 6663 RT استناداً إلى بنية المستشار التقنية لدى erythro.ai‏"
+    "ai_a0": "شكراً لتواصلك! هذه محادثة تجريبية تعمل بدون نموذج نشط أو قاعدة معرفة. في بيئة الإنتاج، ستصدر الإجابات من قاعدة معرفة 6663 RT استناداً إلى بنية المستشار التقنية لدى erythro.ai‏",
+    "c_sending": "جارٍ الإرسال…",
+    "c_err": "تعذر الإرسال. تواصل معنا عبر WhatsApp لرد أسرع‏",
+    "demo_h": "شكرًا لمشاهدتكم",
+    "demo_p": "هذا مشروع استعراضي. لبحث تطوير موقع مخصص لعلامتكم التجارية، يُرجى التواصل معنا‏",
+    "demo_wa": "مراسلة عبر WhatsApp",
+    "demo_open": "تواصل معنا",
+    "demo_msg": "مرحبًا! أود مناقشة تصميم موقع مخصص لعلامتي التجارية، وذلك بعد مشاهدة العرض التجريبي لـ MUSTANG 6663 RT‏"
   },
 } as const satisfies Record<string, Record<string, string>>;

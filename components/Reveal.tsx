@@ -1,6 +1,6 @@
 'use client';
 import { ReactNode, useEffect, useRef } from 'react';
-import { gsap, prefersReducedMotion, ScrollTrigger, useScrollReady } from '@/lib/scroll';
+import { gsap, prefersReducedMotion, ScrollTrigger, useMobileMotion, useScrollReady } from '@/lib/scroll';
 
 type From = 'up' | 'left' | 'right' | 'scale' | 'clip';
 
@@ -57,6 +57,17 @@ export default function Reveal({
 
     return () => { st.kill(); tween.kill(); gsap.set(node, { clearProps: 'all' }); };
   }, [ready, delay, from, scrub]);
+
+  // phones (no smoother, no ScrollTrigger): a CSS fade-up (globals.css, html.static .rv) started by an IntersectionObserver
+  const mobile = useMobileMotion();
+  useEffect(() => {
+    const node = el.current;
+    if (!mobile || !node) return;
+    node.style.transitionDelay = `${Math.round(delay * 0.6)}ms`;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { io.disconnect(); node.classList.add('in'); } }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    io.observe(node);
+    return () => io.disconnect();
+  }, [mobile, delay]);
 
   return <div ref={el} className={`rv ${className}`}>{children}</div>;
 }

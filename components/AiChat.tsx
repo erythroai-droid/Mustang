@@ -2,13 +2,14 @@
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useI18n } from '@/lib/i18n';
 import { gsap, lockScroll } from '@/lib/scroll';
+import { trackDemo } from '@/lib/demo';
 
 type Entry = { id: number; from: 'ai' | 'me'; k?: string; raw?: string };
 const QUICK = [1, 2, 3, 4] as const;
 
 /** Demo AI consultant (Ferrari AiChat pattern): canned answers, no API. Swap `ask` for a real /api/consult later. */
 export default function AiChat() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [open, setOpen] = useState(false);
   const [entries, setEntries] = useState<Entry[]>([{ id: 0, from: 'ai', k: 'ai_hello' }]);
   const [typing, setTyping] = useState(false);
@@ -35,6 +36,7 @@ export default function AiChat() {
     const v = raw.trim();
     if (!v || typing) return;
     setEntries((m) => [...m, { id: ++seq.current, from: 'me', raw: v }]);
+    trackDemo('ai_chat_ask', { q: q ? String(q) : 'free', lang });
     setText('');
     setTyping(true);
     timer.current = setTimeout(() => {
@@ -46,7 +48,7 @@ export default function AiChat() {
 
   return (
     <>
-      <button className={`ai-fab ${open ? 'hide' : ''}`} onClick={() => setOpen(true)} aria-label={t('ai_open')} aria-expanded={open}>
+      <button className={`ai-fab ${open ? 'hide' : ''}`} onClick={() => { setOpen(true); trackDemo('ai_chat_open', { lang }); }} aria-label={t('ai_open')} aria-expanded={open}>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M4 5h16v11H9l-5 4V5z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /><path d="M9 10h6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg>
         <span>{t('ai_open')}</span>
       </button>

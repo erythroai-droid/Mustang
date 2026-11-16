@@ -16,6 +16,27 @@ export const useStaticMode = () => useSyncExternalStore(subscribeStatic, () => w
 
 export const prefersReducedMotion = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+/**
+ * Phones/tablets with motion allowed (ORA 60A mobile pattern): no smooth scroll, pins or scrubbing, but the light
+ * mobile videos play and blocks animate once as they come into view. Reduced motion keeps the fully still page.
+ */
+export const useMobileMotion = () => useStaticMode() && !prefersReducedMotion();
+
+/** Data Saver on: phones get stills instead of videos. */
+export const saveData = () => typeof navigator !== 'undefined' && !!(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+
+/** Runs `on` once, the first time `share` of the element is on screen (IntersectionObserver; no ScrollTrigger needed). */
+export function useOnceInView(ref: { current: Element | null }, on: () => void, enabled: boolean, share = 0.3) {
+  useEffect(() => {
+    const node = ref.current;
+    if (!enabled || !node) return;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { io.disconnect(); on(); } }, { threshold: share });
+    io.observe(node);
+    return () => io.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enabled, share]);
+}
+
 // Children create their ScrollTriggers only after the smoother exists (GSAP requires that order).
 const Ready = createContext(false);
 export const useScrollReady = () => useContext(Ready);

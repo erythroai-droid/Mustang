@@ -5,6 +5,9 @@ import Flag from './Flag';
 import { LANGS, useI18n } from '@/lib/i18n';
 import { goToSection, refreshScroll } from '@/lib/scroll';
 import { BRAND, MODEL } from '@/lib/site';
+import { adSource, trackDemo, waLink } from '@/lib/demo';
+import { gaEvent } from '@/lib/ga';
+import { fbTrack } from '@/lib/metaPixel';
 
 // numbers match the section kickers (02 — …, 05 — …)
 const NAV = [
@@ -23,15 +26,17 @@ export const OPEN_CONTACT = 'open-contact';
 type Which = null | 'menu' | 'contact';
 
 export default function Header() {
-  const { t, lang, setLang } = useI18n();
+  const { t, lang, dir, setLang } = useI18n();
   const [open, setOpen] = useState<Which>(null);
   const [langOpen, setLangOpen] = useState(false);
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [err, setErr] = useState(false);
   const langBox = useRef<HTMLDivElement>(null);
   const close = useCallback(() => setOpen(null), []);
 
   useEffect(() => {
-    const on = () => { setSent(false); setOpen('contact'); };
+    const on = (e: Event) => openForm((e as CustomEvent<string>).detail || 'cta');
     window.addEventListener(OPEN_CONTACT, on);
     return () => window.removeEventListener(OPEN_CONTACT, on);
   }, []);
@@ -60,7 +65,40 @@ export default function Header() {
   }, []);
 
   const go = (hash: string) => { close(); setTimeout(() => goToSection(hash), 120); };
-  const submit = (e: FormEvent) => { e.preventDefault(); setSent(true); };
+  // the reservation form, opened from the header or any CTA (OPEN_CONTACT): opening it is a funnel step of its own
+  function openForm(from: string) {
+    setSent(false); setErr(false); setOpen('contact');
+    trackDemo('contact_form_open', { from, lang });
+    fbTrack('InitiateCheckout', { content_name: 'reserve_form' });
+  }
+  // ORA 60A flow: /api/lead forwards to the n8n webhook (LEAD_WEBHOOK_URL); on failure the visitor gets a WhatsApp link
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (sending) return;
+    const f = new FormData(e.currentTarget);
+    const source = adSource();
+    setSending(true); setErr(false);
+    try {
+      const res = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: f.get('name'), email: f.get('email'), message: f.get('msg'), company: f.get('company'),
+          lang, source, page: window.location.href,
+        }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      setSent(true);
+      fbTrack('Lead', { content_name: 'contact_form' });
+      trackDemo('contact_form_submit', { lang, ...(source ? { source } : {}) });
+      gaEvent('generate_lead', { method: 'form', lang, ...(source ? { source } : {}) });
+    } catch {
+      setErr(true);
+      trackDemo('contact_form_error', { lang });
+    } finally {
+      setSending(false);
+    }
+  };
   const current = LANGS.find((l) => l.code === lang)!;
 
   return (
@@ -102,7 +140,7 @@ export default function Header() {
               </ul>
             )}
           </div>
-          <button className="btn" onClick={() => { setSent(false); setOpen('contact'); }}>{t('reserve')}</button>
+          <button className="btn" onClick={() => openForm('header')}>{t('reserve')}</button>
         </div>
       </header>
 
@@ -130,7 +168,17 @@ export default function Header() {
             <label>{t('c_name')}<input required name="name" autoComplete="name" /></label>
             <label>{t('c_email')}<input required type="email" name="email" autoComplete="email" dir="ltr" /></label>
             <label>{t('c_msg')}<textarea name="msg" rows={4} defaultValue={t('c_msg_def')} /></label>
-            <button className="btn solid" type="submit">{t('c_send')} <span className="arr">→</span></button>
+            {/* honeypot: hidden from people, bots fill it */}
+            <input name="company" tabIndex={-1} autoComplete="off" aria-hidden style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }} />
+            {err && (
+              <p className="form-err" role="alert">
+                {t('c_err')}{' '}
+                <a href={waLink(t('demo_msg'), adSource())} target="_blank" rel="noopener noreferrer">WhatsApp {dir === 'rtl' ? '←' : '→'}</a>
+              </p>
+            )}
+            <button className="btn solid" type="submit" disabled={sending} aria-busy={sending}>
+              {sending ? t('c_sending') : <>{t('c_send')} <span className="arr">→</span></>}
+            </button>
           </form>
         )}
       </Modal>

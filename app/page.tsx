@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Preloader from '@/components/Preloader';
 import Cursor from '@/components/Cursor';
 import AiChat from '@/components/AiChat';
+import DemoNotice from '@/components/DemoNotice';
 import ScrollTop from '@/components/ScrollTop';
 import Hero from '@/components/Hero';
 import { Detail, Drive, Finish, Footer, Marquee, Outro, Reserve, Specs, useLateRefresh } from '@/components/Sections';
@@ -23,6 +24,7 @@ export default function Page() {
       <ScrollTop />
       <Cursor />
       <AiChat />
+      <DemoNotice />
       <SmoothScroll><Content onLoadProgress={(v) => setPct((p) => Math.max(p, v))} /></SmoothScroll>
     </>
   );

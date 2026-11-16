@@ -13,7 +13,19 @@ export default function CountUp({ to, decimals = 0, prefix = '', suffix = '', du
 
   useEffect(() => {
     const node = el.current!;
-    if (staticMode) { node.textContent = fmt(to); return; }       // static page: the final number, no counting
+    if (staticMode) {
+      // phones: count once the number comes into view (no ScrollTrigger here); reduced motion: the final number
+      if (prefersReducedMotion()) { node.textContent = fmt(to); return; }
+      const o = { v: 0 };
+      let tween: gsap.core.Tween | undefined;
+      const io = new IntersectionObserver(([e]) => {
+        if (!e.isIntersecting) return;
+        io.disconnect();
+        tween = gsap.to(o, { v: to, duration, ease: 'power3.out', onUpdate: () => { node.textContent = fmt(o.v); }, onComplete: () => { node.textContent = fmt(to); } });
+      }, { threshold: 0.6 });
+      io.observe(node);
+      return () => { io.disconnect(); tween?.kill(); };
+    }
     if (!ready) return;
     if (prefersReducedMotion()) { node.textContent = fmt(to); return; }
     const o = { v: 0 };
