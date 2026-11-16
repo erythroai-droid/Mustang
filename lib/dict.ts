@@ -145,7 +145,10 @@ export const DICTS = {
     "demo_p": "This is a showcase project. Contact us to discuss a bespoke website for your brand.",
     "demo_wa": "Message on WhatsApp",
     "demo_open": "Get in Touch",
-    "demo_msg": "Hello! I’d like to discuss a custom website for my brand. Reaching out after viewing the MUSTANG 6663 RT demo."
+    "demo_msg": "Hello! I came across the MUSTANG 6663 RT demo and would like a website like this for my business.",
+    "demo_strip": "Demo · Erythro.ai",
+    "demo_cta": "Get a site like this",
+    "demo_more": "View more projects"
   },
   ru: {
     "loading": "Снимаем чехол",
@@ -292,7 +295,10 @@ export const DICTS = {
     "demo_p": "Это демонстрационный проект. Чтобы обсудить такой сайт для вашего бренда, свяжитесь с нами.",
     "demo_wa": "Написать в WhatsApp",
     "demo_open": "Связаться с нами",
-    "demo_msg": "Здравствуйте! Хочу обсудить сайт для своего бренда. Пишу после просмотра демо MUSTANG 6663 RT."
+    "demo_msg": "Здравствуйте! Увидел демо MUSTANG 6663 RT — хочу такой же сайт для своего бизнеса.",
+    "demo_strip": "Демо · Erythro.ai",
+    "demo_cta": "Хочу такой сайт",
+    "demo_more": "Смотреть другие работы"
   },
   he: {
     "loading": "מסירים את הכיסוי",
@@ -439,7 +445,10 @@ export const DICTS = {
     "demo_p": "זהו פרויקט הדגמה. לתיאום פיתוח אתר בהתאמה אישית למותג שלכם, דברו איתנו‏",
     "demo_wa": "הודעה ב-WhatsApp",
     "demo_open": "צרו קשר",
-    "demo_msg": "שלום! אשמח לדבר על אתר למותג שלי. פונה אליכם בעקבות הדמו של MUSTANG 6663 RT‏"
+    "demo_msg": "שלום! ראיתי את הדמו של MUSTANG 6663 RT — ואני רוצה אתר כזה עבור העסק שלי‏",
+    "demo_strip": "דמו · Erythro.ai",
+    "demo_cta": "רוצה אתר כזה",
+    "demo_more": "לפרויקטים נוספים"
   },
   ar: {
     "loading": "نكشف الغطاء",
@@ -586,6 +595,9 @@ export const DICTS = {
     "demo_p": "هذا مشروع استعراضي. لبحث تطوير موقع مخصص لعلامتكم التجارية، يُرجى التواصل معنا‏",
     "demo_wa": "مراسلة عبر WhatsApp",
     "demo_open": "تواصل معنا",
-    "demo_msg": "مرحبًا! أود مناقشة تصميم موقع مخصص لعلامتي التجارية، وذلك بعد مشاهدة العرض التجريبي لـ MUSTANG 6663 RT‏"
+    "demo_msg": "مرحباً! شاهدت العرض التجريبي لـ MUSTANG 6663 RT — وأرغب بموقع مماثل لمشروعي‏",
+    "demo_strip": "عرض تجريبي · Erythro.ai",
+    "demo_cta": "أريد موقعاً مماثلاً",
+    "demo_more": "استعراض المزيد من المشاريع"
   },
 } as const satisfies Record<string, Record<string, string>>;

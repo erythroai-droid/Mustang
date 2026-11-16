@@ -58,9 +58,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         {/* decide the static (no-animation) layout before first paint, so phones never flash the animated one */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.toggle('static',matchMedia('(max-width: 900px), (prefers-reduced-motion: reduce)').matches)" }} />
-        {/* first paint: the first hero frame on desktop, the mobile clip's poster on phones */}
+        {/* first paint: the first hero frame on desktop, the first frame of the mobile pack on phones */}
         <link rel="preload" as="image" href="/frames/assembly/1280/frame_0001.webp" media="(min-width: 901px)" />
-        <link rel="preload" as="image" href="/video/v1-m-poster.webp" media="(max-width: 900px)" />
+        <link rel="preload" as="image" href="/frames/mobile/frame_0001.webp" media="(max-width: 900px)" />
       </head>
       <body>
         <I18nProvider>{children}</I18nProvider>

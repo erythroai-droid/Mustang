@@ -15,6 +15,14 @@ export const framePath = (size: number, i: number) => {
   return `${FRAME_DIR}/${size}/frame_${String(idx + 1).padStart(4, '0')}.webp`;
 };
 
+/**
+ * Phones: the same sheet lift as a light 4:3 frame pack, scrubbed by the scroll (EMBER pattern). Every 2nd frame of
+ * public/video/v1-m.mp4 at 720x540, WebP q62, ~11 KB each (~660 KB in all, streamed in behind the first frame):
+ *   ffmpeg -i public/video/v1-m.mp4 -vf "select='not(mod(n,2))',setpts=N/TB" -fps_mode passthrough -c:v libwebp -quality 62 public/frames/mobile/frame_%04d.webp
+ */
+export const FRAMES_M = 61;
+export const framePathM = (i: number) => `/frames/mobile/frame_${String(Math.max(0, Math.min(FRAMES_M - 1, Math.round(i))) + 1).padStart(4, '0')}.webp`;
+
 /** Optimized photos from scripts/images.mjs. */
 export const img = (name: string, w: 1280 | 2400 = 2400) => `/img/${name}-${w}.webp`;
 export const srcSet = (name: string) => `${img(name, 1280)} 1280w, ${img(name, 2400)} 2400w`;

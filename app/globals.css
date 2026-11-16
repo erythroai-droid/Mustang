@@ -451,3 +451,66 @@ html[lang=ar] :is(.display,.hero-h,.outro-h,.finish-info h3){line-height:1.35}  
   .demo-mini{inset-inline-start:14px;inset-block-end:16px}
   .totop{inset-block-end:80px;inset-inline-end:14px}
 }
+
+/* ---------- phones: the sheet lift follows the scroll (Hero.tsx ScrubHero, EMBER pattern) ---------- */
+/* ~3 screens of scroll; the stage sticks to the top while the 4:3 frame pack is scrubbed */
+.hero-scrub{min-height:0;height:calc(100svh * 3.2);overflow:visible}
+.hs-stage{position:sticky;top:0;height:100svh;overflow:hidden}
+.hs-media img,.hs-canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.hero-scrub .hero-copy{bottom:calc(8vh + var(--sbar))}
+.hero-scrub .hero-stat{opacity:clamp(0,calc(1 - var(--p) * 2.5),1)}
+.hero-scrub .hero-scroll{bottom:calc(2.5vh + var(--sbar))}
+.hero-scrub .hero-ui{transform:translateY(calc(var(--p) * -6vh))}
+
+/* ---------- studio frame: demo strip on top + "I want this site" bar at the bottom (ad traffic, EMBER StudioBar) ---------- */
+:root{--strip:0px;--sbar:0px}
+html.has-studio{--strip:28px;--sbar:76px}
+.studio-strip{position:fixed;z-index:31;inset-block-start:0;inset-inline:0;height:var(--strip);display:flex;align-items:center;justify-content:space-between;gap:9px;
+  padding-inline:var(--gx);background:var(--accent);color:#0b0906;font:600 11px/1 var(--f-text);letter-spacing:.28em;text-transform:uppercase}
+.studio-tag{display:inline-flex;align-items:center;gap:9px;white-space:nowrap}
+.studio-tag i{width:7px;height:7px;border-radius:50%;background:#0b0906;animation:stripDot 1.6s ease-in-out infinite}
+@keyframes stripDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+.studio-more{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;color:#0b0906;letter-spacing:.14em}
+.studio-more .arr{transition:transform .25s}
+.studio-more:hover .arr{transform:translateX(3px)}
+[dir=rtl] .studio-more .arr{transform:scaleX(-1)}
+[dir=rtl] .studio-more:hover .arr{transform:scaleX(-1) translateX(3px)}
+html:is([lang=he],[lang=ar]) .studio-strip{font-size:12px;letter-spacing:0}
+html:is([lang=he],[lang=ar]) .studio-more{letter-spacing:0}
+/* the header sits under the strip */
+html.has-studio .hdr{inset-block-start:var(--strip)}
+html.has-studio .hero-stat{margin-block-start:var(--strip)}
+
+.studio-bar{position:fixed;z-index:45;inset-inline:0;bottom:0;display:flex;justify-content:center;pointer-events:none;
+  padding:10px var(--gx) calc(10px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(5,5,5,.92) 0%,rgba(5,5,5,.75) 60%,rgba(5,5,5,0) 100%)}
+.studio-cta{pointer-events:auto;display:inline-flex;align-items:center;justify-content:center;gap:12px;height:54px;padding-inline:28px;border-radius:40px;
+  background:var(--accent);color:#0b0906;font:600 13px/1 var(--f-text);letter-spacing:.16em;text-transform:uppercase;
+  box-shadow:0 10px 30px rgba(0,0,0,.45);animation:ctaPulse 2.6s ease-in-out infinite;transition:background .25s,transform .25s}
+.studio-cta:hover{background:#e2b867;transform:translateY(-2px)}
+.studio-cta svg{flex:none}
+[dir=rtl] .studio-cta .arr{transform:scaleX(-1)}
+@keyframes ctaPulse{0%,100%{box-shadow:0 10px 30px rgba(0,0,0,.45),0 0 0 0 rgba(212,162,76,.45)}50%{box-shadow:0 10px 30px rgba(0,0,0,.45),0 0 0 10px rgba(212,162,76,0)}}
+html:is([lang=he],[lang=ar]) .studio-cta{font-size:15px;letter-spacing:0}
+
+/* floating buttons ride above the bar; the page end is not hidden under it */
+html.has-studio .ai-fab,html.has-studio .ai{inset-block-end:calc(var(--sbar) + 14px)}
+html.has-studio .totop{inset-block-end:calc(var(--sbar) + 78px)}
+html.has-studio .ftr{padding-block-end:calc(7vh + var(--sbar))}
+html.has-studio .modal.full .modal-x{inset-block-start:calc(20px + var(--strip))}
+
+/* phones: the CTA is one solid full-width plate, edge to edge */
+@media (max-width:900px){
+  html.has-studio{--strip:30px;--sbar:58px}
+  .studio-strip{font-size:9.5px;letter-spacing:.14em;gap:10px}
+  .studio-tag{gap:7px}
+  .studio-more{letter-spacing:.06em}
+  .studio-bar{padding:0;background:none}
+  .studio-cta{width:100%;height:calc(58px + env(safe-area-inset-bottom));padding:0 20px env(safe-area-inset-bottom);
+    border-radius:0;font-size:14px;letter-spacing:.14em;animation:none;box-shadow:0 -10px 30px rgba(0,0,0,.45)}
+  .studio-cta:hover{transform:none}
+  html:is([lang=he],[lang=ar]) .studio-cta{font-size:16px;letter-spacing:0}
+  html.has-studio .ai-fab{inset-block-end:calc(var(--sbar) + 12px)}
+  html.has-studio .totop{inset-block-end:calc(var(--sbar) + 72px)}
+  html.has-studio .ftr{padding-block-end:calc(7vh + var(--sbar) + env(safe-area-inset-bottom))}
+}
+@media (prefers-reduced-motion:reduce){.studio-tag i,.studio-cta{animation:none}}
